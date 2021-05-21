@@ -117,8 +117,8 @@ public struct VCalendar {
 
 public enum ParseError: Error, Equatable {
     case invalidVCalendar
-    case invalidVersion
-    case noVersion
+    case missingProperty(icalproperty_kind)
+    case invalidProperty(icalproperty_kind)
 }
 
 
@@ -136,10 +136,10 @@ extension VCalendar {
 
         // Parse Version
         guard let version = calendarComponent[ICAL_VERSION_PROPERTY].first?.value else {
-            throw ParseError.noVersion
+            throw ParseError.missingProperty(ICAL_VERSION_PROPERTY)
         }
         if version != "2.0" {
-            throw ParseError.invalidVersion
+            throw ParseError.invalidProperty(ICAL_VERSION_PROPERTY)
         }
 
         // Parse Method
@@ -148,7 +148,14 @@ extension VCalendar {
             calendar.method = Method.from(property: methodProperty)
         }
 
-        
+        // Parse events
+
+        let eventComponents = calendarComponent[ICAL_VEVENT_COMPONENT]
+
+        try calendar.events = eventComponents.map { eventComponent in
+            try VEvent(eventComponent: eventComponent)
+        }
+
         return calendar
     }
 }

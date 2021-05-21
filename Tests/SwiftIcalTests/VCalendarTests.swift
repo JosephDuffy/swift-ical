@@ -7,6 +7,7 @@
 
 import XCTest
 import SwiftIcal
+import CLibical
 
 
 class VCalendarTests: XCTestCase {
@@ -82,7 +83,7 @@ class VCalendarTests: XCTestCase {
                 XCTFail("Expected error to be a ParseError. Got \(error.self)")
                 return
             }
-            XCTAssertEqual(parseError, ParseError.noVersion)
+            XCTAssertEqual(parseError, ParseError.missingProperty(ICAL_VERSION_PROPERTY))
         }
     }
 
@@ -99,7 +100,7 @@ class VCalendarTests: XCTestCase {
                 XCTFail("Expected error to be a ParseError. Got \(error.self)")
                 return
             }
-            XCTAssertEqual(parseError, ParseError.invalidVersion)
+            XCTAssertEqual(parseError, ParseError.invalidProperty(ICAL_VERSION_PROPERTY))
         }
     }
 

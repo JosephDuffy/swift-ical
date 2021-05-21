@@ -74,6 +74,38 @@ class EventTests: XCTestCase {
         AssertICSEqual(calendar.icalString(), expected.icalFormatted)
     }
 
+    func testParseSimpleEvent() throws {
+        let expected = """
+        BEGIN:VCALENDAR
+        PRODID:-//SwiftIcal/EN
+        VERSION:2.0
+        BEGIN:VEVENT
+        DTSTAMP:19700101T000000Z
+        DTSTART;TZID=/freeassociation.sourceforge.net/Europe/Berlin:
+         20200509T110000
+        DTEND;TZID=/freeassociation.sourceforge.net/Europe/Berlin:
+         20200509T120000
+        SUMMARY:Hello World
+        UID:TEST-UID
+        TRANSP:OPAQUE
+        CREATED:19700101T000000Z
+        END:VEVENT
+        END:VCALENDAR
+        """
+
+        let calendar = try VCalendar.parse(expected)
+
+        let event = try XCTUnwrap(calendar.events.first)
+
+        XCTAssertEqual(event.dtstamp, Date(timeIntervalSince1970: 0))
+        XCTAssertEqual(event.dtstart, .testDate(year: 2020, month: 5, day: 9, hour: 11, minute: 0, second: 0))
+        XCTAssertEqual(event.dtend, .testDate(year: 2020, month: 5, day: 9, hour: 12, minute: 0, second: 0))
+        XCTAssertEqual(event.summary, "Hello World")
+        XCTAssertEqual(event.uid, "TEST-UID")
+        XCTAssertEqual(event.transparency, .opaque)
+        XCTAssertEqual(event.created, Date(timeIntervalSince1970: 0))
+    }
+
     func testEventWithAttendees() {
         var event = VEvent(summary: "Hello World", dtstart: .testDate(year: 2020, month: 5, day: 9, hour: 11, minute: 0, second: 0))
         event.dtend = .testDate(year: 2020, month: 5, day: 9, hour: 12, minute: 0, second: 0)

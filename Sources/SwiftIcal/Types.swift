@@ -68,6 +68,35 @@ extension TimeZone {
 
 
 extension Date {
+    init?(icalTime: icaltimetype) {
+        var components = DateComponents()
+        components.calendar = Calendar(identifier: .gregorian)
+
+        if let zone = icalTime.zone {
+            let timezoneID = String(
+                cString: icaltimezone_get_tzid(
+                    UnsafeMutablePointer(mutating: zone)
+                )
+            )
+            print("timezoneID", timezoneID)
+            components.timeZone = TimeZone(identifier: timezoneID)
+        }
+
+        components.day = Int(icalTime.day)
+        components.month = Int(icalTime.month)
+        components.year = Int(icalTime.year)
+
+        components.hour = Int(icalTime.hour)
+        components.minute = Int(icalTime.minute)
+        components.second = Int(icalTime.second)
+
+        if let date = components.date {
+            self = date
+        } else {
+            return nil
+        }
+    }
+
     func icalTime(in calendar: Calendar = .autoupdatingCurrent, timeZone: TimeZone) -> icaltimetype {
         let components = calendar.dateComponents(in: timeZone, from: self)
         let day = components.day ?? 0

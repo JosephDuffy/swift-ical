@@ -368,6 +368,31 @@ public struct VEvent {
         self.dtend = dtend
     }
 
+    internal init(eventComponent component: LibicalComponent) throws {
+        summary = component[ICAL_SUMMARY_PROPERTY].first?.value
+        description = component[ICAL_DESCRIPTION_PROPERTY].first?.value
+
+        guard let dtstampProperty = component[ICAL_DTSTAMP_PROPERTY].first else { throw ParseError.missingProperty(ICAL_DTSTAMP_PROPERTY) }
+        guard let dtstamp = Date(icalTime: icalproperty_get_dtstamp(dtstampProperty)) else { throw ParseError.invalidProperty(ICAL_DTSTAMP_PROPERTY) }
+        self.dtstamp = dtstamp
+
+        guard let dtstartProperty = component[ICAL_DTSTART_PROPERTY].first else { throw ParseError.missingProperty(ICAL_DTSTART_PROPERTY) }
+        guard let dtstart = Date(icalTime: icalproperty_get_dtstamp(dtstartProperty)) else { throw ParseError.invalidProperty(ICAL_DTSTART_PROPERTY) }
+        self.dtstart = dtstart.components()
+
+        if let dtendProperty = component[ICAL_DTEND_PROPERTY].first {
+            self.dtend = Date(icalTime: icalproperty_get_dtstamp(dtendProperty))?.components()
+        }
+
+        if let createdProperty = component[ICAL_CREATED_PROPERTY].first {
+            guard let created = Date(icalTime: icalproperty_get_dtstamp(createdProperty)) else {
+                throw ParseError.invalidProperty(ICAL_CREATED_PROPERTY)
+            }
+
+            self.created = created
+        }
+    }
+
     /// A short summary or subject for the calendar component.
     ///
     /// See [RFC 5543 Section 3.8.1.12](https://tools.ietf.org/html/rfc5545#section-3.8.1.12) for details.
