@@ -78,7 +78,6 @@ extension Date {
                     UnsafeMutablePointer(mutating: zone)
                 )
             )
-            print("timezoneID", timezoneID)
             components.timeZone = TimeZone(identifier: timezoneID)
         }
 
