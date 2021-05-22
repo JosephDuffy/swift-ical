@@ -392,6 +392,14 @@ public struct VEvent {
             self.created = created
         }
 
+        if let uidProperty = component[ICAL_UID_PROPERTY].first {
+            guard let uid = icalproperty_get_uid(uidProperty) else {
+                throw ParseError.invalidProperty(ICAL_UID_PROPERTY)
+            }
+
+            self.uid = String(cString: uid)
+        }
+
         location = component[ICAL_LOCATION_PROPERTY].first?.value
     }
 
