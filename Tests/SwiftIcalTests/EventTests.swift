@@ -45,7 +45,7 @@ extension DateComponents {
 
 class EventTests: XCTestCase {
     func testSimpleEvent() {
-        var event = VEvent(summary: "Hello World",
+        var event = VEvent(summary: "Hello World 🌍",
                            dtstart: .testDate(year: 2020, month: 5, day: 9, hour: 11, minute: 0, second: 0))
         event.dtend = .testDate(year: 2020, month: 5, day: 9, hour: 12, minute: 0, second: 0)
         event.dtstamp = Date(timeIntervalSince1970: 0)
@@ -66,7 +66,7 @@ class EventTests: XCTestCase {
          20200509T110000
         DTEND;TZID=/freeassociation.sourceforge.net/Europe/Berlin:
          20200509T120000
-        SUMMARY:Hello World
+        SUMMARY:Hello World 🌍
         UID:TEST-UID
         DESCRIPTION:Join us for the opening of our new cheese store!
         LOCATION:The Moon
@@ -89,7 +89,7 @@ class EventTests: XCTestCase {
          20200509T110000
         DTEND;TZID=/freeassociation.sourceforge.net/Europe/Berlin:
          20200509T120000
-        SUMMARY:Hello World
+        SUMMARY:Hello World 🌍
         UID:TEST-UID
         DESCRIPTION:Join us for the opening of our new cheese store!
         LOCATION: The Moon
@@ -106,7 +106,7 @@ class EventTests: XCTestCase {
         XCTAssertEqual(event.dtstamp, Date(timeIntervalSince1970: 0))
         XCTAssertEqual(event.dtstart, .testDate(year: 2020, month: 5, day: 9, hour: 11, minute: 0, second: 0))
         XCTAssertEqual(event.dtend, .testDate(year: 2020, month: 5, day: 9, hour: 12, minute: 0, second: 0))
-        XCTAssertEqual(event.summary, "Hello World")
+        XCTAssertEqual(event.summary, "Hello World 🌍")
         XCTAssertEqual(event.uid, "TEST-UID")
         XCTAssertEqual(event.description, "Join us for the opening of our new cheese store!")
         XCTAssertEqual(event.location, "The Moon")
