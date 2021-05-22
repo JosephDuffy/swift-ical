@@ -51,6 +51,7 @@ class EventTests: XCTestCase {
         event.dtstamp = Date(timeIntervalSince1970: 0)
         event.created = Date(timeIntervalSince1970: 0)
         event.uid = "TEST-UID"
+        event.location = "The Moon"
         var calendar = VCalendar()
         calendar.events.append(event)
         calendar.autoincludeTimezones = false
@@ -66,6 +67,7 @@ class EventTests: XCTestCase {
          20200509T120000
         SUMMARY:Hello World
         UID:TEST-UID
+        LOCATION:The Moon
         TRANSP:OPAQUE
         CREATED:19700101T000000Z
         END:VEVENT
@@ -87,6 +89,7 @@ class EventTests: XCTestCase {
          20200509T120000
         SUMMARY:Hello World
         UID:TEST-UID
+        LOCATION: The Moon
         TRANSP:OPAQUE
         CREATED:19700101T000000Z
         END:VEVENT
@@ -102,6 +105,7 @@ class EventTests: XCTestCase {
         XCTAssertEqual(event.dtend, .testDate(year: 2020, month: 5, day: 9, hour: 12, minute: 0, second: 0))
         XCTAssertEqual(event.summary, "Hello World")
         XCTAssertEqual(event.uid, "TEST-UID")
+        XCTAssertEqual(event.location, "The Moon")
         XCTAssertEqual(event.transparency, .opaque)
         XCTAssertEqual(event.created, Date(timeIntervalSince1970: 0))
     }

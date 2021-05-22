@@ -391,6 +391,8 @@ public struct VEvent {
 
             self.created = created
         }
+
+        location = component[ICAL_LOCATION_PROPERTY].first?.value
     }
 
     /// A short summary or subject for the calendar component.
@@ -414,6 +416,8 @@ public struct VEvent {
     public var created: Date = Date()
 
     public var recurranceRule: RecurranceRule?
+
+    public var location: String?
 
     public var duration: TimeInterval?
 
@@ -450,6 +454,10 @@ extension VEvent: LibicalComponentConvertible {
         icalcomponent_add_property(comp, icalproperty_new_uid(uid))
         if let description = description {
             icalcomponent_add_property(comp, icalproperty_new_description(description))
+        }
+
+        if let location = location {
+            icalcomponent_add_property(comp, icalproperty_new_location(location))
         }
 
         icalcomponent_add_property(comp, transparency.libicalProperty())
